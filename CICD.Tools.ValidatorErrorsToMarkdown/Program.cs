@@ -10,10 +10,16 @@ using Microsoft.CodeAnalysis.MSBuild;
 
 using Skyline.DataMiner.CICD.FileSystem;
 
-namespace CICD.Tools.ValidatorErrorsToMarkdown
+namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 {
-    internal class Program
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<int> Main(string[] args)
         {
             var fileLocation = new Option<string>(
@@ -22,7 +28,13 @@ namespace CICD.Tools.ValidatorErrorsToMarkdown
             {
                 IsRequired = true
             };
-            var resultLocation
+
+            var resultLocation = new Option<string>(
+                name: "--resultLocation",
+                description: "File where the MarkDown text is saved to")
+            {
+                IsRequired = true
+            };
 
             var rootCommand = new RootCommand("Returns MarkDown from xml file.")
             {
@@ -37,9 +49,11 @@ namespace CICD.Tools.ValidatorErrorsToMarkdown
             return 0;
         }
 
-        private static async Task Process(string fileLocation)
+        private static void Process(string fileLocation)
         {
             XDocument xml = XDocument.Load(fileLocation);
+            var parser = new ParseXmlToMarkDown(xml);
+            parser.ConvertToMarkDown();
         }
     }
 }

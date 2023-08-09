@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CICD.Tools.ValidatorErrorsToMarkdown": {
+      "commandName": "Project",
+      "commandLineArgs": "--fileLocation C:\\Users\\JarneVY\\Downloads\\ErrorMessages.xml"
+    }
+  }
+}
