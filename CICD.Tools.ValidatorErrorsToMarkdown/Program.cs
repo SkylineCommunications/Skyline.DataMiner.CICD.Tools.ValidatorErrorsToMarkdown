@@ -22,15 +22,15 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
         /// </summary>
         public static async Task<int> Main(string[] args)
         {
-            var fileLocation = new Option<string>(
-                name: "--fileLocation",
+            var inputFilePath = new Option<string>(
+                name: "--inputFilePath",
                 description: "File containing the ErrorMessages.")
             {
                 IsRequired = true
             };
 
-            var resultLocation = new Option<string>(
-                name: "--resultLocation",
+            var outputDirectoryPath = new Option<string>(
+                name: "--outputDirectoryPath",
                 description: "File where the MarkDown text is saved to")
             {
                 IsRequired = true
@@ -38,11 +38,11 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 
             var rootCommand = new RootCommand("Returns MarkDown from xml file.")
             {
-                fileLocation,
+                inputFilePath,
             };
 
 
-            rootCommand.SetHandler(Process, fileLocation);
+            rootCommand.SetHandler(Process, inputFilePath);
 
             await rootCommand.InvokeAsync(args);
 

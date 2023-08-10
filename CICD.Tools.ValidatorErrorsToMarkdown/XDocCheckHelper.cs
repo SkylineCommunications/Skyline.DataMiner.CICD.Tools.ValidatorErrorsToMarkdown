@@ -18,18 +18,16 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
             this.descriptionTemplates = descriptionTemplates;
         }
 
-        public string GetCheckName()
-        {
-            string checkName = check.Descendants("Name").FirstOrDefault().Value;
-            return checkName;
-        }
+        public string GetCheckId() => check?.Attribute("id")?.Value;
+
+        public string GetCheckName() => check?.Element("Name")?.Value;
 
         public string GetCheckDescription(XElement errorMessage)
         {
             string format = String.Empty;
             XElement templateInputs = null;
-            var templateId = errorMessage.Descendants("Description").FirstOrDefault().Attribute("templateId");
-            var inputParameters = errorMessage.Descendants("InputParameters").FirstOrDefault();
+            var templateId = errorMessage?.Element("Description")?.Attribute("templateId");
+            var inputParameters = errorMessage?.Element("Description")?.Element("InputParameters");
             if (templateId != null)
             {
                 format = descriptionTemplates.GetFormat(templateId);
@@ -37,31 +35,40 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
             }
             else
             {
-                 format = errorMessage.Descendants("Format").FirstOrDefault().Value;                
+                 format = errorMessage?.Element("Description")?.Element("Format")?.Value;                
             }
 
             var input = GetInputParams(inputParameters, templateInputs);          
             return string.Format(format, input);
         }
 
+        public string GetCheckSeverity(XElement errorMessage) => errorMessage?.Element("Severity")?.Value;
+
+        public string GetCheckCertainty(XElement errorMessage) => errorMessage?.Element("Certainty")?.Value;
+
+        public string GetCheckErrorMessageId(XElement errorMessage) => errorMessage?.Attribute("id")?.Value;
+
+        public string GetCheckErrorMessageName(XElement errorMessage) => errorMessage?.Element("Name")?.Value;
+
         private static string[] GetInputParams(XElement inputParameters, XElement templateInput)
         {
             string[] inputParamsArray;
             IEnumerable<XElement> inputParams = null;
-            if (templateInput != null)
+            if (templateInput is not null)
             {
-                IEnumerable<XElement> templateInputs = templateInput.Descendants("InputParameter");
+                IEnumerable<XElement> templateInputs = templateInput?.Elements("InputParameter");
                 inputParamsArray = new string[templateInputs.Count()];
                 inputParamsArray = GetCorrectInput(templateInputs, inputParamsArray);
             }
             else
             {
-                inputParams = inputParameters.Descendants("InputParameter");
-                inputParamsArray = new string[inputParams.Count()];
+                inputParamsArray = new string[inputParameters.Elements("InputParameter").Count()];
             }
 
-            inputParams = inputParameters.Descendants("InputParameter");
-            inputParamsArray = GetCorrectInput(inputParams, inputParamsArray);
+            inputParams = inputParameters?.Elements("InputParameter");
+            if (inputParams is not null)
+                inputParamsArray = GetCorrectInput(inputParams, inputParamsArray);
+
             return inputParamsArray;
         }
 
@@ -72,11 +79,11 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
             {
                 if (parameter.Attribute("value") == null)
                 {
-                    inputParamsArray[index] = "{" + parameter.Value + "}";
+                    inputParamsArray[index] = "{" + parameter?.Value + "}";
                 }
                 else
                 {
-                    inputParamsArray[index] = parameter.Attribute("value").Value;
+                    inputParamsArray[index] = parameter?.Attribute("value")?.Value;
                 }
 
                 index++;

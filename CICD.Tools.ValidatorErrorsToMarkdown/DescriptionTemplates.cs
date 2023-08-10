@@ -19,18 +19,18 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
         public string GetFormat(XAttribute templateId)
         {
             var template = GetElementById(templateId);
-            return template.Descendants("Format").FirstOrDefault().Value;
+            return template?.Element("Format")?.Value;
         }
 
         public XElement GetTemplateInputs(XAttribute templateId)
         {
             var template = GetElementById(templateId);
-            return template.Descendants("InputParameters").FirstOrDefault();
+            return template?.Element("InputParameters");
         }
 
         private XElement GetElementById(XAttribute templateId)
         {
-            return descriptionTemplates.Descendants("DescriptionTemplate").Where(template => template.Attribute("id").Value == templateId.Value).FirstOrDefault();
+            return descriptionTemplates?.Elements("DescriptionTemplate").Where(template => template?.Attribute("id")?.Value == templateId?.Value).FirstOrDefault();
         }
     }
 }
