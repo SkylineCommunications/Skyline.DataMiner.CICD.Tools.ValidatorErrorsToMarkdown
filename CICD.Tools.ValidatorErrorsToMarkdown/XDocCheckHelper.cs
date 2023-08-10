@@ -24,10 +24,10 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 
         public string GetCheckDescription(XElement errorMessage)
         {
-            string format = String.Empty;
             XElement templateInputs = null;
             var templateId = errorMessage?.Element("Description")?.Attribute("templateId");
             var inputParameters = errorMessage?.Element("Description")?.Element("InputParameters");
+            string format;
             if (templateId != null)
             {
                 format = descriptionTemplates.GetFormat(templateId);
@@ -35,7 +35,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
             }
             else
             {
-                 format = errorMessage?.Element("Description")?.Element("Format")?.Value;                
+                format = errorMessage?.Element("Description")?.Element("Format")?.Value;
             }
 
             var input = GetInputParams(inputParameters, templateInputs);          
@@ -52,28 +52,31 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 
         private static string[] GetInputParams(XElement inputParameters, XElement templateInput)
         {
+            IEnumerable<XElement> inputParams = inputParameters?.Elements("InputParameter");
             string[] inputParamsArray;
-            IEnumerable<XElement> inputParams = null;
             if (templateInput is not null)
             {
                 IEnumerable<XElement> templateInputs = templateInput?.Elements("InputParameter");
                 inputParamsArray = new string[templateInputs.Count()];
-                inputParamsArray = GetCorrectInput(templateInputs, inputParamsArray);
+                inputParamsArray = CheckValueOverrides(templateInputs, inputParamsArray);
             }
             else
             {
                 inputParamsArray = new string[inputParameters.Elements("InputParameter").Count()];
             }
 
-            inputParams = inputParameters?.Elements("InputParameter");
+            
             if (inputParams is not null)
-                inputParamsArray = GetCorrectInput(inputParams, inputParamsArray);
+                inputParamsArray = CheckValueOverrides(inputParams, inputParamsArray);
 
             return inputParamsArray;
         }
 
-        private static string[] GetCorrectInput(IEnumerable<XElement> inputs, string[] inputParamsArray)
-        {            
+        /// <summary>
+        /// Checks if the value atribute overrides the value of the parameter and returns the array with the expected values
+        /// </summary>
+        private static string[] CheckValueOverrides(IEnumerable<XElement> inputs, string[] inputParamsArray)
+        {
             int index = 0;
             foreach (var parameter in inputs)
             {
