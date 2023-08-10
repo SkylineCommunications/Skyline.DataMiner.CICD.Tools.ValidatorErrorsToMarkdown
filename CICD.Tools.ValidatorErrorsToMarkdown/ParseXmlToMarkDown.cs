@@ -26,11 +26,10 @@
         }
 
         /// <summary>
-        /// 
+        /// creating the MarkDown file.
         /// </summary>
         public void ConvertToMarkDown()
-        {
-            
+        {           
             var categories = xml?.Element("Validator")?.Element("ValidationChecks")?.Element("Categories")?.Elements("Category");
             foreach (var category in categories)
             {              
