@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 {
@@ -16,8 +14,10 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
         private readonly DescriptionTemplates descriptionTemplates;
 
         /// <summary>
-        /// constructor with as input the Check itself and all description templates.
+        /// Creates an instance of class <see cref="XDocCheckHelper"/>.
         /// </summary>
+        /// <param name="check"></param>
+        /// <param name="descriptionTemplates"></param>
         public XDocCheckHelper(XElement check, DescriptionTemplates descriptionTemplates)
         {
             this.check = check;
@@ -25,33 +25,43 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
         }
 
         /// <summary>
-        /// Gets the id of the Check.
+        /// Gets the id of the <see cref="check"/>.
         /// </summary>
+        /// <returns>A <see cref="string"/> checkId.</returns>
         public string GetCheckId() => check?.Attribute("id")?.Value;
 
         /// <summary>
-        /// Gets the Name of the Check.
+        /// Gets the Name of the <see cref="check"/>.
         /// </summary>
+        /// <returns>A <see cref="string"/> checkName.</returns>
         public string GetCheckName() => check?.Element("Name")?.Value;
 
         /// <summary>
-        /// Gets the id of the error message.
+        /// Gets the id of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckErrorMessageId(XElement errorMessage) => errorMessage?.Attribute("id")?.Value;
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> errorMessageId.</returns>
+        public static string GetCheckErrorMessageId(XElement errorMessage) => errorMessage?.Attribute("id")?.Value;
 
         /// <summary>
-        /// Gets the name of the error message.
+        /// Gets the name of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckErrorMessageName(XElement errorMessage) => errorMessage?.Element("Name")?.Value;
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> errorMessageName.</returns>
+        public static string GetCheckErrorMessageName(XElement errorMessage) => errorMessage?.Element("Name")?.Value;
 
         /// <summary>
-        /// Gets the group description of the error message.
+        /// Gets the group description of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckGroupDescription(XElement errorMessage) => errorMessage?.Element("GroupDescription")?.Value;
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> groupDescription.</returns>
+        public static string GetCheckGroupDescription(XElement errorMessage) => errorMessage?.Element("GroupDescription")?.Value;
 
         /// <summary>
-        /// Gets the Description of the error message.
+        /// Gets the description of the <see cref="XElement"/> errorMessage.
         /// </summary>
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> description.</returns>
         public string GetCheckDescription(XElement errorMessage)
         {
             XElement templateInputs = null;
@@ -73,53 +83,67 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
         }
 
         /// <summary>
-        /// Gets the severity of the error message.
+        /// Gets the severity of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckSeverity(XElement errorMessage) => errorMessage?.Element("Severity")?.Value;
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> severity.</returns>
+        public static string GetCheckSeverity(XElement errorMessage) => errorMessage?.Element("Severity")?.Value;
 
         /// <summary>
-        /// Gets the certainty of the error message.
+        /// Gets the certainty of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckCertainty(XElement errorMessage) => errorMessage?.Element("Certainty")?.Value;
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> certainty.</returns>
+        public static string GetCheckCertainty(XElement errorMessage) => errorMessage?.Element("Certainty")?.Value;
 
         /// <summary>
-        /// Gets the source of the error message.
+        /// Gets the source of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckSource(XElement errorMessage) => errorMessage?.Element("Source")?.Value;
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> source.</returns>
+        public static string GetCheckSource(XElement errorMessage) => errorMessage?.Element("Source")?.Value;
 
         /// <summary>
-        /// Gets the fix impact of the error message.
+        /// Gets the fix impact of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckFixImpact(XElement errorMessage) => errorMessage?.Element("FixImpact")?.Value;
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> fixImpact.</returns>
+        public static string GetCheckFixImpact(XElement errorMessage) => errorMessage?.Element("FixImpact")?.Value;
 
         /// <summary>
-        /// Gets the code fix of the error message.
+        /// Has the <see cref="XElement"/> errorMessage a code fix.
         /// </summary>
-        public bool HasCheckErrorMessageCodeFix(XElement errorMessage) => errorMessage?.Element("HasCodeFix")?.Value is "True";
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="bool"/> hasCodeFix.</returns>
+        public static bool HasCheckErrorMessageCodeFix(XElement errorMessage) => errorMessage?.Element("HasCodeFix")?.Value is "True";
 
         /// <summary>
-        /// Gets the how to fix of the error message.
+        /// Gets the how to fix of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckHowToFix(XElement errorMessage) => SetNewLines(errorMessage?.Element("HowToFix")?.Value);
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> howToFix.</returns>
+        public static string GetCheckHowToFix(XElement errorMessage) => SetNewLines(errorMessage?.Element("HowToFix")?.Value);
 
         /// <summary>
-        /// Gets the example code of the error message.
+        /// Gets the example code of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckExampleCode(XElement errorMessage) => SetNewLines(errorMessage?.Element("ExampleCode")?.Value);
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> exampleCode.</returns>
+        public static string GetCheckExampleCode(XElement errorMessage) => SetNewLines(errorMessage?.Element("ExampleCode")?.Value);
 
         /// <summary>
-        /// Gets the details of the error message.
+        /// Gets the details of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckDetails(XElement errorMessage) => SetNewLines(errorMessage?.Element("Details")?.Value);
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="string"/> details.</returns>
+        public static string GetCheckDetails(XElement errorMessage) => SetNewLines(errorMessage?.Element("Details")?.Value);
 
         /// <summary>
-        /// Gets the auto fix warnings of the error message.
+        /// Gets the auto fix warnings of the <see cref="XElement"/> errorMessage.
         /// </summary>
-        public string GetCheckAutoFixWarnings(XElement errorMessage)
-        {
-            var warnings = errorMessage?.Element("AutoFixWarnings").Elements("AutoFixWarning").ToList();
-            return warnings[0].Value + Environment.NewLine + Environment.NewLine + warnings[1].Value;
-        }
+        /// <param name="errorMessage"></param>
+        /// <returns>A <see cref="List{T}"/> with autoFixWarnings.</returns>
+        public static List<string> GetCheckAutoFixWarnings(XElement errorMessage) => errorMessage?.Element("AutoFixWarnings")?.Elements("AutoFixWarning")?.Select(AutoFixWarning => AutoFixWarning.Value).ToList();
 
         private static string[] GetInputParams(XElement inputParameters, XElement templateInput)
         {
@@ -144,8 +168,11 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
         }
 
         /// <summary>
-        /// Checks if the value atribute overrides the value of the parameter and returns the array with the expected values
+        /// Checks every <see cref="XElement"/> parameter in <see cref="T:string[]"/> inputParamsArray if the <see cref="XAttribute"/> value overrides the parameter value.
         /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="inputParamsArray"></param>
+        /// <returns>A <see cref="T:string[]"/> with the correct values</returns>
         private static string[] CheckValueOverrides(IEnumerable<XElement> inputs, string[] inputParamsArray)
         {
             int index = 0;

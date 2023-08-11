@@ -1,10 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
 {
@@ -37,7 +32,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckDescription(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -72,7 +67,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckDescription(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -116,7 +111,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
             XElement element = XElement.Parse(xmlContent);
             XElement template = XElement.Parse(xmlTemplateContent);
             DescriptionTemplates templates = new DescriptionTemplates(template);
-            XDocCheckHelper helper = new XDocCheckHelper(element, templates);
+            XDocCheckHelper helper = new(element, templates);
             
             // Act
             var result = helper.GetCheckDescription(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -159,8 +154,8 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                             </DescriptionTemplates>";
             XElement element = XElement.Parse(xmlContent);
             XElement template = XElement.Parse(xmlTemplateContent);
-            DescriptionTemplates templates = new DescriptionTemplates(template);
-            XDocCheckHelper helper = new XDocCheckHelper(element, templates);
+            DescriptionTemplates templates = new(template);
+            XDocCheckHelper helper = new(element, templates);
 
             // Act
             var result = helper.GetCheckDescription(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -199,8 +194,8 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                             </DescriptionTemplates>";
             XElement element = XElement.Parse(xmlContent);
             XElement template = XElement.Parse(xmlTemplateContent);
-            DescriptionTemplates templates = new DescriptionTemplates(template);
-            XDocCheckHelper helper = new XDocCheckHelper(element, templates);
+            DescriptionTemplates templates = new(template);
+            XDocCheckHelper helper = new(element, templates);
 
             // Act
             var result = helper.GetCheckDescription(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -234,7 +229,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckName();
@@ -268,7 +263,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckId();
@@ -302,7 +297,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckSeverity(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -336,7 +331,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckCertainty(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -370,7 +365,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckErrorMessageId(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -404,7 +399,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckErrorMessageName(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -438,7 +433,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckGroupDescription(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -472,7 +467,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckSource(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -506,7 +501,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckFixImpact(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -540,7 +535,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.HasCheckErrorMessageCodeFix(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -574,7 +569,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckHowToFix(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -608,7 +603,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckExampleCode(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -642,7 +637,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = helper.GetCheckDetails(element.Descendants("ErrorMessage").FirstOrDefault());
@@ -680,13 +675,13 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new XDocCheckHelper(element, null);
+            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckAutoFixWarnings(element.Descendants("ErrorMessage").FirstOrDefault());
-
-            // Assert
-            Assert.AreEqual("Double check the use of the Parameter class in QActions." + Environment.NewLine + Environment.NewLine + "Double check the use of the (Get/Set)ParameterByName methods in QActions.", result);
+            var result = XDocCheckHelper.GetCheckAutoFixWarnings(element.Descendants("ErrorMessage").FirstOrDefault());
+             // Assert
+            Assert.AreEqual("Double check the use of the Parameter class in QActions.", result[0]);
+            Assert.AreEqual("Double check the use of the (Get/Set)ParameterByName methods in QActions.", result[1]);
         }
     }
 }

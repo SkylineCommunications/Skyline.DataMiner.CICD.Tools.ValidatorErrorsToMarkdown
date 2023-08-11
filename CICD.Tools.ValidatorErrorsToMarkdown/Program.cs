@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.IO;
-using System.Linq;
+﻿using System.CommandLine;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Microsoft.Build.Locator;
-using Microsoft.CodeAnalysis.MSBuild;
-
-using Skyline.DataMiner.CICD.FileSystem;
 
 namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 {
     /// <summary>
-    /// 
+    /// This tool converts an xml file of error messages from the validator of DIS to MarkDown files t put in the internal docs.
     /// </summary>
     public class Program
     {
         /// <summary>
-        /// 
+        /// Creates the functionality of the tool by getting the input (inputFilePath) and storing the output (outputDirectoryPath).
         /// </summary>
+        /// <param name="args"></param>
         public static async Task<int> Main(string[] args)
         {
             var inputFilePath = new Option<string>(
@@ -31,7 +24,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 
             var outputDirectoryPath = new Option<string>(
                 name: "--outputDirectoryPath",
-                description: "File where the MarkDown text is saved to")
+                description: "Directory where the MarkDown files are saved to")
             {
                 IsRequired = true
             };
@@ -39,20 +32,21 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
             var rootCommand = new RootCommand("Returns MarkDown from xml file.")
             {
                 inputFilePath,
+                outputDirectoryPath,
             };
 
 
-            rootCommand.SetHandler(Process, inputFilePath);
+            rootCommand.SetHandler(Process, inputFilePath, outputDirectoryPath);
 
             await rootCommand.InvokeAsync(args);
 
             return 0;
         }
 
-        private static void Process(string fileLocation)
+        private static void Process(string inputFilePath, string outputDirectoryPath)
         {
-            XDocument xml = XDocument.Load(fileLocation);
-            var parser = new ParseXmlToMarkDown(xml);
+            XDocument xml = XDocument.Load(inputFilePath);
+            var parser = new ParseXmlToMarkDown(xml, outputDirectoryPath);
             parser.ConvertToMarkDown();
         }
     }
