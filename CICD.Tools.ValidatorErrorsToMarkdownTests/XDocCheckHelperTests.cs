@@ -297,10 +297,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckSeverity(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckSeverity(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("Critical", result);
@@ -331,10 +330,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckCertainty(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckCertainty(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("Certain", result);
@@ -365,10 +363,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckErrorMessageId(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckErrorMessageId(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("5", result);
@@ -399,10 +396,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckErrorMessageName(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckErrorMessageName(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("InvalidPrefix", result);
@@ -433,10 +429,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckGroupDescription(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckGroupDescription(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("Unrecommended chars in some parameter names.", result);
@@ -467,10 +462,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckSource(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckSource(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("Validator", result);
@@ -501,10 +495,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckFixImpact(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckFixImpact(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("NonBreaking", result);
@@ -535,10 +528,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.HasCheckErrorMessageCodeFix(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.HasCheckErrorMessageCodeFix(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual(true, result);
@@ -569,10 +561,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckHowToFix(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckHowToFix(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual($"Use one of the following constructors:{Environment.NewLine}- XmlSerializer.XmlSerializer(Type){Environment.NewLine}- XmlSerializer.XmlSerializer(Type, String)", result);
@@ -603,10 +594,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckExampleCode(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckExampleCode(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("object[] elementInfo = new object[] { elementId, ipPort, multipleSet, instance, connectionId, setCommunityString, enableRetries, agentId };" + Environment.NewLine + "object[] oidInfo = new object[] { new object[] { oid, newValue, snmpType } };" + Environment.NewLine + Environment.NewLine + "object[] result = (object[])protocol.NotifyProtocol(292/*NT_SNMP_SET*/, elementInfo, oidInfo);", result);
@@ -637,10 +627,9 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
-            var result = helper.GetCheckDetails(element.Descendants("ErrorMessage").FirstOrDefault());
+            var result = XDocCheckHelper.GetCheckDetails(element.Descendants("ErrorMessage").FirstOrDefault());
 
             // Assert
             Assert.AreEqual("Skyline recommends the following structure for driver pages:" + Environment.NewLine + "- General" + Environment.NewLine + "- -----------" + Environment.NewLine + "- Data Page(s)" + Environment.NewLine + "- -----------" + Environment.NewLine + "- WebInterface", result);
@@ -675,7 +664,6 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                         </ErrorMessage>
                                     </Check>";
             XElement element = XElement.Parse(xmlContent);
-            XDocCheckHelper helper = new(element, null);
 
             // Act
             var result = XDocCheckHelper.GetCheckAutoFixWarnings(element.Descendants("ErrorMessage").FirstOrDefault());
