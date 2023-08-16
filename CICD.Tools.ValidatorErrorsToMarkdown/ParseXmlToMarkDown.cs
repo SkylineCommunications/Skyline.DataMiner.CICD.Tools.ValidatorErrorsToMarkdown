@@ -13,7 +13,7 @@
     {
         private readonly XDocument xml;
         private readonly string outputDirectoryPath;
-        DescriptionTemplates descriptionTemplates;
+        private readonly DescriptionTemplates descriptionTemplates;
 
         /// <summary>
         /// Creates an instance of class <see cref="ParseXmlToMarkDown"/>
