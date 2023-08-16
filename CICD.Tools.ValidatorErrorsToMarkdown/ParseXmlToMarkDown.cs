@@ -37,7 +37,6 @@
             {
                 string catagoryId = category?.Attribute("id")?.Value;
                 string catagoryName = category?.Element("Name")?.Value;
-                Directory.CreateDirectory($@"{outputDirectoryPath}\Validator\{catagoryName}");
 
                 var checks = category?.Element("Checks")?.Elements("Check");
                 foreach (var check in checks)
@@ -45,7 +44,6 @@
                     XDocCheckHelper helper = new(check, descriptionTemplates);
                     string checkName = helper.GetCheckName();
                     string checkId = helper.GetCheckId();
-                    Directory.CreateDirectory($@"{outputDirectoryPath}\Validator\{catagoryName}\{checkName}");
 
                     var errorMessages = check.Descendants("ErrorMessage");
                     foreach (var errorMessage in errorMessages)
@@ -92,13 +90,16 @@
                         {
                             MdParagraph warnings = new();
                             warnings.Add(new MdRawMarkdownSpan($"[!WARNING]\r\n"));
-                            for (int i = 0; i < autofixWarnings.Count; i++) 
+                            for (int i = 0; i < autofixWarnings.Count; i++)
                             {
-                                warnings.Add(new MdRawMarkdownSpan($"{autofixWarnings[i]}\r\n"));                               
+                                warnings.Add(new MdRawMarkdownSpan($"{autofixWarnings[i]}\r\n"));
                             }
                         }
 
-                        doc.Save($@"{outputDirectoryPath}\Validator\{catagoryName}\{checkName}\{uid}.md");
+                        string source = XDocCheckHelper.GetCheckSource(errorMessage);
+                        Directory.CreateDirectory($@"{outputDirectoryPath}\DIS\{source}\{catagoryName}\{checkName}");
+
+                        doc.Save($@"{outputDirectoryPath}\DIS\{source}\{catagoryName}\{checkName}\{uid}.md");
                     }
                 }
             }
@@ -147,8 +148,8 @@
                 MdTableRow tableRowDescriptionGroup = new(groupDescriptionCells);
                 table.Add(tableRowDescriptionGroup);
             }
-            
-            return table ;
+
+            return table;
         }
     }
 }
