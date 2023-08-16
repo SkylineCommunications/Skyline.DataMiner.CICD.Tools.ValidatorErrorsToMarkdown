@@ -9,7 +9,7 @@
     /// <summary>
     /// Converts the xml file to a tree structure with markDown files
     /// </summary>
-    internal class ParseXmlToMarkDown
+    public class ParseXmlToMarkDown
     {
         private readonly XDocument xml;
         private readonly string outputDirectoryPath;
@@ -49,7 +49,7 @@
                     foreach (var errorMessage in errorMessages)
                     {
                         string fullId = $"{catagoryId}.{checkId}.{XDocCheckHelper.GetCheckErrorMessageId(errorMessage)}";
-                        string uid = $"Validator_{catagoryId}_{checkId}_{XDocCheckHelper.GetCheckErrorMessageId(errorMessage)}";
+                        string uid = $"{XDocCheckHelper.GetCheckSource(errorMessage)}_{catagoryId}_{checkId}_{XDocCheckHelper.GetCheckErrorMessageId(errorMessage)}";
                         MdDocument doc = new();
                         // uid
                         doc.Root.Add(new MdParagraph(new MdRawMarkdownSpan($"---\r\nuid: {uid}\r\n---")));
@@ -100,9 +100,39 @@
                         Directory.CreateDirectory($@"{outputDirectoryPath}\DIS\{source}\{catagoryName}\{checkName}");
 
                         doc.Save($@"{outputDirectoryPath}\DIS\{source}\{catagoryName}\{checkName}\{uid}.md");
+                        CreateTableOfContent();
                     }
                 }
             }
+        }
+
+        private void CreateTableOfContent()
+        {
+            MdParagraph toc = new();
+            foreach (string dirSource in Directory.GetDirectories(@$"{outputDirectoryPath}\DIS"))
+            {
+                string dirSourceName = dirSource.Split(@"\").Last();
+                toc.Add(new MdRawMarkdownSpan($"- name: {dirSourceName}\r\n  topicUid: {dirSourceName}\r\n  items:"));
+                foreach (string dirCategory in Directory.GetDirectories(dirSource))
+                {
+                    string dirCategoryName = dirCategory.Split(@"\").Last();
+                    toc.Add(new MdRawMarkdownSpan($"\r\n  - name: {dirCategoryName}\r\n    topicUid: {dirCategoryName}\r\n    items:"));
+                    foreach (string dirCheck in Directory.GetDirectories(dirCategory))
+                    {
+                        string dirCheckName = dirCheck.Split(@"\").Last();
+                        toc.Add(new MdRawMarkdownSpan($"\r\n    - name: {dirCheckName}\r\n      topicUid: {dirCheckName}\r\n      items:"));
+                        foreach (string mdFile in Directory.GetFiles(dirCheck))
+                        {
+                            string fileName = File.ReadLines(mdFile).Skip(6).Take(1).First()[3..];
+                            toc.Add(new MdRawMarkdownSpan($"\r\n      - name: {fileName}\r\n        topicUid: {dirCheckName}"));
+                        }
+                    }
+                }
+                toc.Add(new MdRawMarkdownSpan($"\r\n"));
+            }
+            MdDocument tocDoc = new();
+            tocDoc.Root.Add(toc);
+            tocDoc.Save($@"{outputDirectoryPath}\DIS\toc.yml");
         }
 
         /// <summary>
