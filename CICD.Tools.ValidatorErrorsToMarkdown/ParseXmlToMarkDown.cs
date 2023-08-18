@@ -112,71 +112,11 @@
 
         private void CreateToc()
         {
-            string filePath = $@"{outputDirectoryPath}\DIS\toc.yml";
             TocBuilder builder = new();
             var root = builder.CreateFromDirectory($@"{outputDirectoryPath}\DIS");
             StringBuilder sb = new();
             root.Build(sb);
             File.WriteAllText($@"{outputDirectoryPath}\DIS\toc.yml", sb.ToString());
-        }
-
-        private void CreateTableOfContent()
-        {           
-            MdParagraph toc = new();
-            foreach (string dirSource in Directory.GetDirectories(@$"{outputDirectoryPath}\DIS"))
-            {
-                int spacesCount = 2;
-                int Compare = 0;
-                string dirSourceName = dirSource.Split(@"\").Last();
-                toc.Add(new MdRawMarkdownSpan($"- name: {dirSourceName}{Environment.NewLine}"));
-                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}items:{Environment.NewLine}"));
-                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}- name: Protocol{Environment.NewLine}"));
-                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount += 2)}items:{Environment.NewLine}"));
-                string[] protocolDir = Directory.GetDirectories(@$"{dirSource}\Protocol", "*", SearchOption.AllDirectories).OrderBy(f => f).ToArray(); //todo cleanup
-                foreach (string enteryPath in protocolDir)
-                {
-                    string[] enteryDirectories = enteryPath.Split(@"\");
-                    string enteryName = enteryDirectories.Last();
-                    int dirCount = enteryDirectories.Count();
-                    if (Compare > dirCount)
-                        spacesCount = 4;
-                    
-                    Compare = dirCount;
-                    toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}- name: {enteryName}{Environment.NewLine}"));
-                    toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount += 2)}items:{Environment.NewLine}"));
-                    if (IsCheck(enteryName))
-                    {                       
-                        toc = GetCheckSpan(spacesCount, enteryPath, toc);
-                    }                    
-                }
-            }           
-            MdDocument tocDoc = new();
-            tocDoc.Root.Add(toc);
-            tocDoc.Save($@"{outputDirectoryPath}\DIS\toc.yml");
-        }
-
-        private static bool IsCheck(string entery) => entery.StartsWith("Check");
-
-        private static MdParagraph GetCheckSpan(int spacesCount, string EnteryPath, MdParagraph toc)
-        {
-            foreach (string errormessagePath in Directory.GetFiles(EnteryPath))
-            {
-                string fileName = errormessagePath.Split(@"\").Last();
-                string errormessageName = File.ReadLines(errormessagePath).Skip(6).Take(1).First()[3..];
-                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}- name: {errormessageName}{Environment.NewLine}"));
-                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount + 2)}topicUid: {fileName.Split('.').First()}{Environment.NewLine}"));
-            }
-            return toc;
-        }
-
-        private static string GetSpaces(int spacesCount)
-        {
-            string spaces = "";
-            for (int i = 0; i < spacesCount; i++)
-            {
-                spaces += " ";
-            }
-            return spaces;
         }
 
         /// <summary>
