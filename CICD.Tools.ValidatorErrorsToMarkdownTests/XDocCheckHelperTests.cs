@@ -110,7 +110,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
                                             </DescriptionTemplates>";
             XElement element = XElement.Parse(xmlContent);
             XElement template = XElement.Parse(xmlTemplateContent);
-            DescriptionTemplates templates = new DescriptionTemplates(template);
+            DescriptionTemplates templates = new(template);
             XDocCheckHelper helper = new(element, templates);
             
             // Act

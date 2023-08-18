@@ -37,6 +37,12 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
         public string GetCheckName() => check?.Element("Name")?.Value;
 
         /// <summary>
+        /// Gets the namespace of the <see cref="check"/>.
+        /// </summary>
+        /// <returns>A <see cref="string"/> checkNamespace.</returns>
+        public string GetCheckNampespace() => check?.Element("Name")?.Attribute("namespace")?.Value;
+
+        /// <summary>
         /// Gets the id of the <see cref="XElement"/> errorMessage.
         /// </summary>
         /// <param name="errorMessage"></param>

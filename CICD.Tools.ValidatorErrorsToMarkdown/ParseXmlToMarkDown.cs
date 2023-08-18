@@ -1,8 +1,10 @@
 ﻿namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Xml.Linq;
     using Grynwald.MarkdownGenerator;
 
@@ -42,6 +44,8 @@
                 foreach (var check in checks)
                 {
                     XDocCheckHelper helper = new(check, descriptionTemplates);
+                    string nameSpace = helper.GetCheckNampespace();
+                    string namespacePath = string.Join('/', nameSpace.Split('.'));
                     string checkName = helper.GetCheckName();
                     string checkId = helper.GetCheckId();
 
@@ -97,42 +101,82 @@
                         }
 
                         string source = XDocCheckHelper.GetCheckSource(errorMessage);
-                        Directory.CreateDirectory($@"{outputDirectoryPath}\DIS\{source}\{catagoryName}\{checkName}");
+                        Directory.CreateDirectory($@"{outputDirectoryPath}\DIS\{source}\{namespacePath}\{checkName}");
 
-                        doc.Save($@"{outputDirectoryPath}\DIS\{source}\{catagoryName}\{checkName}\{uid}.md");
-                        CreateTableOfContent();
+                        doc.Save($@"{outputDirectoryPath}\DIS\{source}\{namespacePath}\{checkName}\{uid}.md");
                     }
                 }
             }
+            CreateToc();
+        }
+
+        private void CreateToc()
+        {
+            string filePath = $@"{outputDirectoryPath}\DIS\toc.yml";
+            TocBuilder builder = new();
+            var root = builder.CreateFromDirectory($@"{outputDirectoryPath}\DIS");
+            StringBuilder sb = new();
+            root.Build(sb);
+            File.WriteAllText($@"{outputDirectoryPath}\DIS\toc.yml", sb.ToString());
         }
 
         private void CreateTableOfContent()
-        {
+        {           
             MdParagraph toc = new();
             foreach (string dirSource in Directory.GetDirectories(@$"{outputDirectoryPath}\DIS"))
             {
+                int spacesCount = 2;
+                int Compare = 0;
                 string dirSourceName = dirSource.Split(@"\").Last();
-                toc.Add(new MdRawMarkdownSpan($"- name: {dirSourceName}\r\n  topicUid: {dirSourceName}\r\n  items:"));
-                foreach (string dirCategory in Directory.GetDirectories(dirSource))
+                toc.Add(new MdRawMarkdownSpan($"- name: {dirSourceName}{Environment.NewLine}"));
+                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}items:{Environment.NewLine}"));
+                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}- name: Protocol{Environment.NewLine}"));
+                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount += 2)}items:{Environment.NewLine}"));
+                string[] protocolDir = Directory.GetDirectories(@$"{dirSource}\Protocol", "*", SearchOption.AllDirectories).OrderBy(f => f).ToArray(); //todo cleanup
+                foreach (string enteryPath in protocolDir)
                 {
-                    string dirCategoryName = dirCategory.Split(@"\").Last();
-                    toc.Add(new MdRawMarkdownSpan($"\r\n  - name: {dirCategoryName}\r\n    topicUid: {dirCategoryName}\r\n    items:"));
-                    foreach (string dirCheck in Directory.GetDirectories(dirCategory))
-                    {
-                        string dirCheckName = dirCheck.Split(@"\").Last();
-                        toc.Add(new MdRawMarkdownSpan($"\r\n    - name: {dirCheckName}\r\n      topicUid: {dirCheckName}\r\n      items:"));
-                        foreach (string mdFile in Directory.GetFiles(dirCheck))
-                        {
-                            string fileName = File.ReadLines(mdFile).Skip(6).Take(1).First()[3..];
-                            toc.Add(new MdRawMarkdownSpan($"\r\n      - name: {fileName}\r\n        topicUid: {dirCheckName}"));
-                        }
-                    }
+                    string[] enteryDirectories = enteryPath.Split(@"\");
+                    string enteryName = enteryDirectories.Last();
+                    int dirCount = enteryDirectories.Count();
+                    if (Compare > dirCount)
+                        spacesCount = 4;
+                    
+                    Compare = dirCount;
+                    toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}- name: {enteryName}{Environment.NewLine}"));
+                    toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount += 2)}items:{Environment.NewLine}"));
+                    if (IsCheck(enteryName))
+                    {                       
+                        toc = GetCheckSpan(spacesCount, enteryPath, toc);
+                    }                    
                 }
-                toc.Add(new MdRawMarkdownSpan($"\r\n"));
-            }
+            }           
             MdDocument tocDoc = new();
             tocDoc.Root.Add(toc);
             tocDoc.Save($@"{outputDirectoryPath}\DIS\toc.yml");
+        }
+
+        private static bool IsCheck(string entery) => entery.StartsWith("Check");
+
+        private static MdParagraph GetCheckSpan(int spacesCount, string EnteryPath, MdParagraph toc)
+        {
+            foreach (string errormessagePath in Directory.GetFiles(EnteryPath))
+            {
+                string fileName = errormessagePath.Split(@"\").Last();
+                string errormessageName = File.ReadLines(errormessagePath).Skip(6).Take(1).First()[3..];
+                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount)}- name: {errormessageName}{Environment.NewLine}"));
+                toc.Add(new MdRawMarkdownSpan($"{GetSpaces(spacesCount + 2)}topicUid: {fileName.Split('.').First()}{Environment.NewLine}"));
+            }
+            return toc;
+        }
+
+        private static string GetSpaces(int spacesCount)
+        {
+            string spaces = "";
+            for (int i = 0; i < spacesCount; i++)
+            {
+                spaces += " ";
+            }
+            return spaces;
         }
 
         /// <summary>
