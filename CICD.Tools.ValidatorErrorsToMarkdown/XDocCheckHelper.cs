@@ -84,7 +84,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
                 format = errorMessage?.Element("Description")?.Element("Format")?.Value;
             }
 
-            var input = GetInputParams(inputParameters, templateInputs);          
+            var input = GetInputParams(inputParameters, templateInputs);
             return string.Format(format, input);
         }
 
@@ -166,7 +166,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
                 inputParamsArray = new string[inputParameters.Elements("InputParameter").Count()];
             }
 
-            
+
             if (inputParams is not null)
                 inputParamsArray = CheckValueOverrides(inputParams, inputParamsArray);
 

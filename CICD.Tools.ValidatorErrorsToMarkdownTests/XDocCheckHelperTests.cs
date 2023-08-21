@@ -112,7 +112,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
             XElement template = XElement.Parse(xmlTemplateContent);
             DescriptionTemplates templates = new(template);
             XDocCheckHelper helper = new(element, templates);
-            
+
             // Act
             var result = helper.GetCheckDescription(element.Descendants("ErrorMessage").FirstOrDefault());
 
@@ -667,7 +667,7 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown.Tests
 
             // Act
             var result = XDocCheckHelper.GetCheckAutoFixWarnings(element.Descendants("ErrorMessage").FirstOrDefault());
-             // Assert
+            // Assert
             Assert.AreEqual("Double check the use of the Parameter class in QActions.", result[0]);
             Assert.AreEqual("Double check the use of the (Get/Set)ParameterByName methods in QActions.", result[1]);
         }

@@ -1,6 +1,5 @@
 ﻿namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
