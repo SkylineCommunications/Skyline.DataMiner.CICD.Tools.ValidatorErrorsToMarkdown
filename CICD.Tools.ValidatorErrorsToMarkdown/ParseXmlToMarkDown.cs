@@ -106,16 +106,19 @@
                     }
                 }
             }
-            CreateToc();
-        }
 
-        private void CreateToc()
+            CreateToc("Validator");
+            CreateToc("MajorChangeChecker");
+        }
+        
+        private void CreateToc(string folder)
         {
-            TocBuilder builder = new();
-            var root = builder.CreateFromDirectory($@"{outputDirectoryPath}\DIS");
-            StringBuilder sb = new();
-            root.Build(sb);
-            File.WriteAllText($@"{outputDirectoryPath}\DIS\toc.yml", sb.ToString());
+            StringBuilder sb = new StringBuilder();
+            string startFolder = $@"{outputDirectoryPath}\DIS\{folder}";
+
+            TocFolder root = new TocFolder(startFolder);
+	        root.Build(sb);
+	        File.WriteAllText($@"{outputDirectoryPath}\DIS\toc_{folder}.yml", sb.ToString());
         }
 
         /// <summary>
