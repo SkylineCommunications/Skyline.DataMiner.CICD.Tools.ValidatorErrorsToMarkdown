@@ -184,13 +184,14 @@ namespace Skyline.DataMiner.CICD.Tools.ValidatorErrorsToMarkdown
             int index = 0;
             foreach (var parameter in inputs)
             {
-                if (parameter.Attribute("value") == null)
+	            string valueAttribute = parameter.Attribute("value")?.Value;
+	            if (String.IsNullOrEmpty(valueAttribute))
                 {
-                    inputParamsArray[index] = "{" + parameter?.Value + "}";
+                    inputParamsArray[index] = "{" + parameter.Value + "}";
                 }
                 else
                 {
-                    inputParamsArray[index] = parameter?.Attribute("value")?.Value;
+                    inputParamsArray[index] = valueAttribute;
                 }
 
                 index++;

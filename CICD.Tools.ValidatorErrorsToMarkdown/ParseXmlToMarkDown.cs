@@ -118,7 +118,7 @@
 
             TocFolder root = new TocFolder(startFolder);
 	        root.Build(sb);
-	        File.WriteAllText($@"{outputDirectoryPath}\DIS\toc_{folder}.yml", sb.ToString());
+	        File.WriteAllText($@"{outputDirectoryPath}\DIS\toc_{folder}_COPY_AND_DELETE_ME.yml", sb.ToString());
         }
 
         /// <summary>
