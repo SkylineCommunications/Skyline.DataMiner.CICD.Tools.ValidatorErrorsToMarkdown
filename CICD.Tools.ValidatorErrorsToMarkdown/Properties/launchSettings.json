@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CICD.Tools.ValidatorErrorsToMarkdown": {
+      "commandName": "Project",
+      "commandLineArgs": "--inputFilePath C:\\GitHub\\DIS\\ProtocolEditor\\SLDisValidator2\\ErrorMessages.xml --outputDirectoryPath \"C:\\GitHub\\dataminer-docs - FORK\\develop\\TOOLS\""
+    }
+  }
+}
